@@ -82,14 +82,13 @@ public final class VWLearners {
             STATIC_LOCK.lock();
             try {
                 if (!loadedNativeLibrary) {
-                    NativeUtils.loadOSDependentLibrary("/lib/vw_jni", ".lib");
+                    NativeUtils.loadOSDependentLibrary();
                     loadedNativeLibrary = true;
                 }
             }
-            catch (final IOException e) {
-                // Here I've chosen to rethrow the exception as an unchecked exception because if the native
-                // library cannot be loaded then the exception is not recoverable from.
-                throw new RuntimeException(e);
+            catch (final Throwable e) {
+                // unable to load library, send users to documentation
+                throw new RuntimeException("Unable to load analytics native library. Please refer to http://www.stardog.com/docs/#_native_library_errors", e);
             }
             finally {
                 STATIC_LOCK.unlock();
@@ -102,4 +101,10 @@ public final class VWLearners {
 
     // Closing needs to be done here when initialization fails and by VWBase
     static native void closeInstance(long nativePointer);
+
+    static native float exampleNumber(long nativePointer);
+
+    static native float sumLoss(long nativePointer);
+
+    static native void saveModel(long nativePointer, String filename);
 }

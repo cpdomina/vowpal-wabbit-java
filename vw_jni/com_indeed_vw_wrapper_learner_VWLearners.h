@@ -32,6 +32,30 @@ JNIEXPORT void JNICALL Java_com_indeed_vw_wrapper_learner_VWLearners_closeInstan
 JNIEXPORT jobject JNICALL Java_com_indeed_vw_wrapper_learner_VWLearners_getReturnType
 (JNIEnv *, jobject, jlong);
 
+/*
+ * Class:     vowpalWabbit_learner_VWLearners
+ * Method:    exampleNumber
+ * Signature: (J)J
+ */
+JNIEXPORT jfloat JNICALL Java_com_indeed_vw_wrapper_learner_VWLearners_exampleNumber
+(JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     vowpalWabbit_learner_VWLearners
+ * Method:    sumLoss
+ * Signature: (J)J
+ */
+JNIEXPORT jfloat JNICALL Java_com_indeed_vw_wrapper_learner_VWLearners_sumLoss
+(JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     vowpalWabbit_learner_VWLearners
+ * Method:    saveModel
+ * Signature: (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_indeed_vw_wrapper_learner_VWLearners_saveModel
+(JNIEnv *, jclass, jlong, jstring);
+
 #ifdef __cplusplus
 }
 #endif

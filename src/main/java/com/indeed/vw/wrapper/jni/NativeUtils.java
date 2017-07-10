@@ -55,28 +55,26 @@ public class NativeUtils {
         }
     }
 
-    /**
-     * Loads a library from current JAR archive by looking up platform dependent name.
-     *
-     * @param path   The filename inside JAR as absolute path (beginning with '/'), e.g. /package/File.ext
-     * @param suffix The suffix to be appended to the name
-     * @throws UnsupportedEncodingException If an error occurs while determining the Linux specific
-     *                                      information.
-     * @throws IOException                  If temporary file creation or read/write operation fails
-     */
-    public static void loadOSDependentLibrary(final String path, final String suffix) throws IOException {
-        final String osFamily = getOsFamily();
-        String osDependentLib = null;
-        final String currentOsDependentLib = path + "." + osFamily + suffix;
-        if (NativeUtils.class.getResource(currentOsDependentLib) != null) {
-            osDependentLib = currentOsDependentLib;
-        }
-        if (osDependentLib != null) {
-            logger.info("Loading " + osDependentLib);
-            loadLibraryFromJar(osDependentLib);
-        } else {
-            logger.info("Loading " + path + suffix);
-            loadLibraryFromJar(path + suffix);
+	/**
+	 * Load vw library
+	 *
+	 * @throws IOException
+	 */
+    public static void loadOSDependentLibrary() throws IOException {
+        try {
+			// try to load library from classpath
+			System.loadLibrary("vw_jni");
+
+		} catch (UnsatisfiedLinkError e) {
+            // if not possible, try to use a previously compiled version
+            final String osFamily = getOsFamily();
+            final String currentOsDependentLib = "/lib/vw_jni." + osFamily + ".lib";
+
+            if (NativeUtils.class.getResource(currentOsDependentLib) != null) {
+                loadLibraryFromJar(currentOsDependentLib);
+            } else {
+                throw new RuntimeException("Unable to load vw_jni library for " + System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ")");
+            }    
         }
     }
 
